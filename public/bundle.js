@@ -24332,7 +24332,8 @@
 	  getInitialState() {
 	    return {
 	      status: 'disconnected',
-	      title: ''
+	      title: '',
+	      dance: 'yooooo'
 	    };
 	  },
 
@@ -24364,7 +24365,7 @@
 	      'div',
 	      null,
 	      React.createElement(Header, { title: this.state.title, status: this.state.status }),
-	      this.props.children
+	      React.cloneElement(this.props.children, Object.assign({}, this.state, { more: 'values' }))
 	    );
 	  }
 	});
@@ -32043,7 +32044,8 @@
 	    return React.createElement(
 	      'h1',
 	      null,
-	      'Audience'
+	      'Audience: ',
+	      this.props.title
 	    );
 	  }
 	});
@@ -32064,7 +32066,8 @@
 	    return React.createElement(
 	      'h1',
 	      null,
-	      'Speaker'
+	      'Speaker: ',
+	      this.props.status
 	    );
 	  }
 	});
@@ -32085,7 +32088,8 @@
 	    return React.createElement(
 	      'h1',
 	      null,
-	      'Board'
+	      'Board: ',
+	      this.props.dance
 	    );
 	  }
 	});

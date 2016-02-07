@@ -10,7 +10,8 @@ var APP = React.createClass({
   getInitialState() {
     return {
       status: 'disconnected',
-      title: ''
+      title: '',
+      dance: 'yooooo'
     };
   },
 
@@ -41,7 +42,11 @@ var APP = React.createClass({
     return (
       <div>
         <Header title={this.state.title} status={this.state.status}/>
-        {this.props.children}
+        {
+          React.cloneElement(this.props.children,
+            Object.assign({}, this.state, { more: 'values' })
+          )
+        }
       </div>
     );
   }
