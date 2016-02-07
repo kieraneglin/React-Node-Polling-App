@@ -19645,6 +19645,8 @@
 /* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/*jshint esversion: 6 */
+
 	var React = __webpack_require__(1);
 	var io = __webpack_require__(159);
 	var Header = __webpack_require__(209);
@@ -19654,24 +19656,40 @@
 
 	  getInitialState() {
 	    return {
-	      status: 'disconnected'
+	      status: 'disconnected',
+	      title: ''
 	    };
 	  },
 
 	  componentWillMount() {
 	    this.socket = io('http://localhost:3000');
 	    this.socket.on('connect', this.connect);
+	    this.socket.on('disconnect', this.disconnect);
+	    this.socket.on('welcome', this.welcome);
 	  },
 
 	  connect() {
-	    this.setState({ status: 'connected' });
+	    this.setState({
+	      status: 'connected'
+	    });
+	  },
+
+	  disconnect() {
+	    this.setState({
+	      status: 'disconnected'
+	    });
+	  },
+
+	  welcome(serverState) {
+	    this.setState({ title: serverState.title });
 	  },
 
 	  render() {
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(Header, { title: 'New Header', status: this.state.status })
+	      React.createElement(Header, { title: this.state.title, status: this.state.status }),
+	      ' '
 	    );
 	  }
 	});
@@ -27299,38 +27317,39 @@
 	var React = __webpack_require__(1);
 
 	var Header = React.createClass({
-	  displayName: 'Header',
+		displayName: 'Header',
 
-	  propTypes: {
-	    title: React.PropTypes.string.isRequired
-	  },
+		propTypes: {
+			title: React.PropTypes.string.isRequired
+		},
 
-	  getDefaultProps() {
-	    return {
-	      status: 'disconnected'
-	    };
-	  },
+		getDefaultProps() {
+			return {
+				status: 'disconnected'
+			};
+		},
 
-	  render() {
-	    return React.createElement(
-	      'header',
-	      { className: 'row' },
-	      React.createElement(
-	        'div',
-	        { className: 'col-xs-10' },
-	        React.createElement(
-	          'h1',
-	          null,
-	          this.props.title
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'col-xs-2' },
-	        React.createElement('span', { id: 'connection-status', className: this.props.status })
-	      )
-	    );
-	  }
+		render() {
+			return React.createElement(
+				'header',
+				{ className: 'row' },
+				React.createElement(
+					'div',
+					{ className: 'col-xs-10' },
+					React.createElement(
+						'h1',
+						null,
+						this.props.title
+					)
+				),
+				React.createElement(
+					'div',
+					{ className: 'col-xs-2' },
+					React.createElement('span', { id: 'connection-status', className: this.props.status })
+				)
+			);
+		}
+
 	});
 
 	module.exports = Header;

@@ -1,31 +1,48 @@
+/*jshint esversion: 6 */
+
 var React = require('react');
 var io = require('socket.io-client');
 var Header = require('./parts/Header');
 
 var APP = React.createClass({
 
-  getInitialState(){
+  getInitialState() {
     return {
-      status: 'disconnected'
-    }
+      status: 'disconnected',
+      title: ''
+    };
   },
 
-  componentWillMount(){
+  componentWillMount() {
     this.socket = io('http://localhost:3000');
-    this.socket.on('connect', this.connect)
+    this.socket.on('connect', this.connect);
+    this.socket.on('disconnect', this.disconnect);
+    this.socket.on('welcome', this.welcome);
   },
 
-  connect(){
-    this.setState({ status: 'connected' });
+  connect() {
+    this.setState({
+      status: 'connected'
+    });
   },
 
-	render() {
-		return (
+  disconnect() {
+    this.setState({
+      status: 'disconnected'
+    });
+  },
+
+  welcome(serverState) {
+    this.setState({title: serverState.title})
+  },
+
+  render() {
+    return (
       <div>
-        <Header title="New Header" status={this.state.status} />
+        <Header title={this.state.title} status={this.state.status}/>
       </div>
     );
-	}
+  }
 });
 
 module.exports = APP;
